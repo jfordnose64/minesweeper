@@ -6,7 +6,10 @@ class Cell extends Component {
       <>
         <td
           className="cell"
-          onContextMenu={this.props.rightClickEvent}
+          onContextMenu={e => {
+            e.preventDefault()
+            this.props.rightClickEvent()
+          }}
           onClick={this.props.onClick}
         >
           {this.props.display}

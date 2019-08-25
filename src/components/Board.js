@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Cell from './Cell'
+import Win from './Win'
 
 export class Board extends Component {
   state = {
@@ -10,7 +11,7 @@ export class Board extends Component {
     gameId: ''
   }
 
-  newGame = async () => {
+  resetGame = async () => {
     await axios
       .post('http://minesweeper-api.herokuapp.com/games', {
         // difficulty: 0
@@ -38,6 +39,12 @@ export class Board extends Component {
           currState: resp.data.state,
           mines: resp.data.mines
         })
+        console.table(resp.data.state)
+      })
+      .then(() => {
+        if (this.state.currState === 'lost') {
+          console.log('You Lose')
+        }
       })
   }
 
@@ -57,25 +64,71 @@ export class Board extends Component {
       })
   }
 
-  startGame = () => {
-    this.newGame()
+  easyMode = () => {
+    axios
+      .post(`http://minesweeper-api.herokuapp.com/games`, {
+        difficulty: 0
+      })
+      .then(resp => {
+        this.setState({
+          board: resp.data.board,
+          currState: resp.data.state,
+          mines: resp.data.mines,
+          gameId: resp.data.id
+        })
+      })
   }
 
-  // async componentDidMount() {
-  //   this.newGame()
-  // }
+  medMode = () => {
+    axios
+      .post(`http://minesweeper-api.herokuapp.com/games`, {
+        difficulty: 1
+      })
+      .then(resp => {
+        this.setState({
+          board: resp.data.board,
+          currState: resp.data.state,
+          mines: resp.data.mines,
+          gameId: resp.data.id
+        })
+      })
+  }
+
+  hardMode = () => {
+    axios
+      .post(`http://minesweeper-api.herokuapp.com/games`, {
+        difficulty: 2
+      })
+      .then(resp => {
+        this.setState({
+          board: resp.data.board,
+          currState: resp.data.state,
+          mines: resp.data.mines,
+          gameId: resp.data.id
+        })
+      })
+  }
+
+  winnerOrLoser = () => {
+    if (this.state.currState === 'lost') {
+      return 'You Lose!'
+    } else if (this.state.currState === 'Win') {
+      return 'You Win, Good Job!'
+    }
+  }
+
   render() {
     return (
       <div>
-        <button onClick={this.startGame}>Start Game</button>
+        <p className="winOrLose">{this.winnerOrLoser}</p>
         <nav>
-          <button className="button-easy" onClick={this.easyMode}>
+          <button className="buttons" onClick={this.easyMode}>
             Easy
           </button>
-          <button className="button-medium" onClick={this.medMode}>
+          <button className="buttons" onClick={this.medMode}>
             Medium
           </button>
-          <button className="button-hard" onClick={this.hardMode}>
+          <button className="buttons" onClick={this.hardMode}>
             Hard
           </button>
         </nav>
@@ -99,6 +152,9 @@ export class Board extends Component {
             })}
           </tbody>
         </table>
+        <button className="buttons" onClick={this.resetGame}>
+          Reset
+        </button>
       </div>
     )
   }

@@ -16,11 +16,12 @@ body {
 
 .cell {
   border: 1px solid black;
-
-  height: 3rem;
-  width: 3rem;
+  padding: 0.2rem;
+  height: 1rem;
+  width: 1rem;
 }
 
 .buttons {
   margin: 1rem;
+  border-radius: 0.2rem;
 }
