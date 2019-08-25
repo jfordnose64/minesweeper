@@ -120,7 +120,7 @@ export class Board extends Component {
   render() {
     return (
       <div>
-        <p className="winOrLose">{this.winnerOrLoser}</p>
+        <p className="winOrLose">{this.winnerOrLoser()}</p>
         <nav>
           <button className="buttons" onClick={this.easyMode}>
             Easy
